@@ -852,16 +852,8 @@ Settings MainWindow::getCppcheckSettings()
 
     result.exename = QCoreApplication::applicationFilePath().toStdString();
 
-    const bool std = tryLoadLibrary(&result.library, "std.cfg");
-    bool posix = true;
-    if (result.posix())
-        posix = tryLoadLibrary(&result.library, "posix.cfg");
-    bool windows = true;
-    if (result.isWindowsPlatform())
-        windows = tryLoadLibrary(&result.library, "windows.cfg");
-
-    if (!std || !posix || !windows)
-        QMessageBox::critical(this, tr("Error"), tr("Failed to load %1. Your Cppcheck installation is broken. You can use --data-dir=<directory> at the command line to specify where this file is located. Please note that --data-dir is supposed to be used by installation scripts and therefore the GUI does not start when it is used, all that happens is that the setting is configured.").arg(!std ? "std.cfg" : !posix ? "posix.cfg" : "windows.cfg"));
+    if (tryLoadLibrary(&result.library, "std.cfg"))
+        QMessageBox::critical(this, tr("Error"), tr("Failed to load %1. Your Cppcheck installation is broken. You can use --data-dir=<directory> at the command line to specify where this file is located. Please note that --data-dir is supposed to be used by installation scripts and therefore the GUI does not start when it is used, all that happens is that the setting is configured.").arg("std.cfg"));
 
     // If project file loaded, read settings from it
     if (mProjectFile) {

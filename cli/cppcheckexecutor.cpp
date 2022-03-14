@@ -879,16 +879,9 @@ int CppCheckExecutor::check_internal(CppCheck& cppcheck, int /*argc*/, const cha
         }
     }
 
-    bool posix = true;
-    if (settings.posix())
-        posix = tryLoadLibrary(settings.library, argv[0], "posix.cfg");
-    bool windows = true;
-    if (settings.isWindowsPlatform())
-        windows = tryLoadLibrary(settings.library, argv[0], "windows.cfg");
-
-    if (!std || !posix || !windows) {
+    if (!std) {
         const std::list<ErrorMessage::FileLocation> callstack;
-        const std::string msg("Failed to load " + std::string(!std ? "std.cfg" : !posix ? "posix.cfg" : "windows.cfg") + ". Your Cppcheck installation is broken, please re-install.");
+        const std::string msg("Failed to load std.cfg. Your Cppcheck installation is broken, please re-install.");
 #ifdef FILESDIR
         const std::string details("The Cppcheck binary was compiled with FILESDIR set to \""
                                   FILESDIR "\" and will therefore search for "
